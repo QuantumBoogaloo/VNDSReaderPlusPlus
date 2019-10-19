@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <typeinfo>
 
 #include "VNVita\Commands.h"
 #include "VNVita\Visitors.h"
