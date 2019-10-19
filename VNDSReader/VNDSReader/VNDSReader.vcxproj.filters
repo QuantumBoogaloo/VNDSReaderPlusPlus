@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Visitors">
+      <UniqueIdentifier>{5ddcb973-d688-4bb8-874e-1060d4f990a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Comamnds">
+      <UniqueIdentifier>{9b426197-253a-4d17-b177-ecf1cb875824}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VNVita\Commands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\ParseException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Visitors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\AwaitInputCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\BackgroundLoadCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\ChoiceCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\ClearGlobalVariablesCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\ClearLocalVariablesCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\ClearTextCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\Command.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\Commands.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\CommandVisitor.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\DelayCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\EndScriptCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\FiCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\GoToCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\IfCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\JumpCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\LabelCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\Operations.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\PlayMusicCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\PlaySoundCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\RandomCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\SetGlobalVariableCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\SetImageCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\SetLocalVariableCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\SkipCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\StopMusicCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\StopSoundCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\TextCommand.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Commands\TextOption.h">
+      <Filter>Header Files\Comamnds</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Visitors\CommandFormatVisitor.h">
+      <Filter>Header Files\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\Visitors\Visitors.h">
+      <Filter>Header Files\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\CharReaders\IStreamCharReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\CharReaders\StringCharReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\CharReaders\CharReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\CharReaders\CharReaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VNVita\CharReaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
