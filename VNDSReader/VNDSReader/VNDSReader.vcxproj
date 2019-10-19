@@ -149,6 +149,7 @@
     <ClInclude Include="VNVita\ParseException.h" />
     <ClInclude Include="VNVita\Parser.h" />
     <ClInclude Include="VNVita\CharReaders\StringCharReader.h" />
+    <ClInclude Include="VNVita\ParseResult.h" />
     <ClInclude Include="VNVita\Visitors.h" />
     <ClInclude Include="VNVita\Visitors\CommandFormatVisitor.h" />
     <ClInclude Include="VNVita\Visitors\Visitors.h" />

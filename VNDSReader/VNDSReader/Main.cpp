@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <typeinfo>
 
 #include "VNVita\Commands.h"
 #include "VNVita\Visitors.h"
@@ -27,8 +28,6 @@ void ProcessFile(std::string path);
 
 int main(int argumentCount, const char * arguments[])
 {
-	//ProcessFile("I:/Documents/Quantum Boogaloo/VNDS Notes/Scripts - Copy/cross channel/script/adstart.scr");
-
 	if(argumentCount < 1)
 	{
 		std::cout << "Usage: VNDSReader <path> ...\n";
@@ -66,6 +65,59 @@ bool tryReplaceExtension(const std::string & input, std::string & result, const 
 	return true;
 }
 
+std::vector<VNVita::ParseResult> readResults(VNVita::Parser & parser)
+{
+	using VNVita::ParseResult;
+
+	std::vector<ParseResult> results;
+
+	ParseResult result;
+	while(parser.tryParseNextCommand(result))
+		results.push_back(result);
+
+	return results;
+}
+
+std::vector<std::shared_ptr<VNVita::Command>> filterErroneousCommands(const std::vector<VNVita::ParseResult> & results)
+{
+	using VNVita::Command;
+	using VNVita::IfCommand;
+	using VNVita::FiCommand;
+	
+	std::vector<std::shared_ptr<Command>> commands;
+
+	bool isInErroneousIfBlock = false;
+
+	for(std::size_t index = 0; index < results.size(); ++index)
+	{
+		const auto & result = results[index];
+
+		if(result.getCommand() == nullptr)
+			continue;
+
+		if(isInErroneousIfBlock)
+		{
+			const auto commandPointer = result.getCommand().get();
+			const auto command = dynamic_cast<FiCommand *>(commandPointer);
+			if(command != nullptr)
+				isInErroneousIfBlock = false;
+		}
+		else if(result.hasException())
+		{
+			const auto commandPointer = result.getCommand().get();
+			const auto command = dynamic_cast<IfCommand *>(commandPointer);
+			if(command != nullptr)
+				isInErroneousIfBlock = true;
+		}
+		else
+		{
+			commands.push_back(result.getCommand());
+		}
+	}
+
+	return commands;
+}
+
 void ProcessFile(std::string path)
 {
 	using namespace VNVita;
@@ -77,10 +129,10 @@ void ProcessFile(std::string path)
 	Parser parser(std::make_shared<IStreamCharReader>(inputFile));
 	
 	// Read commands into vector
-	std::vector<std::shared_ptr<Command>> commands;
+	auto results = readResults(parser);
 
-	for(auto command = parser.parseNextCommand(); command != nullptr; command = parser.parseNextCommand())
-		commands.push_back(std::move(command));
+	// Filter the commands
+	auto commands = filterErroneousCommands(results);
 
 	// Get output file path
 	std::string outputPath;

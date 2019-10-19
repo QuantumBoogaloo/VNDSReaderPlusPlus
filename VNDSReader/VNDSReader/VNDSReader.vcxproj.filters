@@ -143,5 +143,8 @@
     <ClInclude Include="VNVita\CharReaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VNVita\ParseResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

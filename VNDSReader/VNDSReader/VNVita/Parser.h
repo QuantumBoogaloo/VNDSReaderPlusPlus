@@ -22,6 +22,7 @@
 #include "Commands.h"
 #include "CharReaders.h"
 #include "ParseException.h"
+#include "ParseResult.h"
 
 namespace VNVita
 {
@@ -39,21 +40,22 @@ namespace VNVita
 		{
 		}
 
-		std::shared_ptr<Command> parseNextCommand()
+		bool tryParseNextCommand(ParseResult & result)
 		{
 			std::string text;
 
 			if(this->reader->tryReadDelimited(text, "\n"))
 			{
 				auto reader = StringCharReader(text);
-				return this->parseNextCommand(reader);
+				result = this->parseNextCommand(reader);
+				return true;
 			}
 
-			return nullptr;
+			return false;
 		}
 
 	private:
-		std::shared_ptr<Command> parseNextCommand(CharReader & reader)
+		ParseResult parseNextCommand(CharReader & reader)
 		{
 			std::string name;
 
@@ -114,14 +116,11 @@ namespace VNVita
 			return std::make_shared<SkipCommand>();
 		}
 
-		std::shared_ptr<BackgroundLoadCommand> parseBackgroundLoadCommand(CharReader & reader)
+		ParseResult parseBackgroundLoadCommand(CharReader & reader)
 		{
 			std::string path;
 			if(!tryReadString(reader, path))
-			{
-				// TODO: Handle error
-				throw ParseException("Unable to parse <path>");
-			}
+				return ParseResult(std::make_shared<BackgroundLoadCommand>(path), "Unable to parse <path>");
 
 			int fadeTime;
 			if(!tryReadInt(reader, fadeTime))
@@ -130,40 +129,28 @@ namespace VNVita
 			return std::make_shared<BackgroundLoadCommand>(path, fadeTime);
 		}
 
-		std::shared_ptr<SetImageCommand> parseSetImageCommand(CharReader & reader)
+		ParseResult parseSetImageCommand(CharReader & reader)
 		{
 			std::string path;
 			if(!tryReadString(reader, path))
-			{
-				// TODO: Handle error
-				throw ParseException("Unable to parse <path>");
-			}
+				return ParseResult(std::make_shared<SetImageCommand>(path, 0, 0), "Unable to parse <path>");
 
 			int x;
 			if(!tryReadInt(reader, x))
-			{
-				// TODO: Handle error
-				throw ParseException("Unable to parse <x>");
-			}
+				return ParseResult(std::make_shared<SetImageCommand>(path, x, 0), "Unable to parse <x>");
 
 			int y;
 			if(!tryReadInt(reader, y))
-			{
-				// TODO: Handle error
-				throw ParseException("Unable to parse <x>");
-			}
+				return ParseResult(std::make_shared<SetImageCommand>(path, x, y), "Unable to parse <y>");
 
 			return std::make_shared<SetImageCommand>(path, x, y);
 		}
 
-		std::shared_ptr<Command> parseSoundCommand(CharReader & reader)
+		ParseResult parseSoundCommand(CharReader & reader)
 		{
 			std::string path;
 			if(!tryReadString(reader, path))
-			{
-				// TODO: Handle error
-				throw ParseException("Unable to parse <path>");
-			}
+				return ParseResult(std::make_shared<PlaySoundCommand>(path), "Unable to parse <path>");
 
 			if(path == "~")
 				return std::make_shared<StopSoundCommand>();
@@ -175,14 +162,11 @@ namespace VNVita
 			return std::make_shared<PlaySoundCommand>(path, repeats);
 		}
 
-		std::shared_ptr<Command> parseMusicCommand(CharReader & reader)
+		ParseResult parseMusicCommand(CharReader & reader)
 		{
 			std::string path;
 			if(!tryReadString(reader, path))
-			{
-				// TODO: Handle error
-				throw ParseException("Unable to parse <path>");
-			}
+				return ParseResult(std::make_shared<PlayMusicCommand>(path), "Unable to parse <path>");
 
 			if(path == "~")
 				return std::make_shared<StopMusicCommand>();
@@ -190,7 +174,7 @@ namespace VNVita
 			return std::make_shared<PlayMusicCommand>(path);
 		}
 
-		std::shared_ptr<Command> parseTextCommand(CharReader & reader)
+		ParseResult parseTextCommand(CharReader & reader)
 		{
 			std::string text;
 			if(!tryReadString(reader, text))
@@ -209,7 +193,7 @@ namespace VNVita
 			return std::make_shared<TextCommand>(text, TextOption::AwaitInput);
 		}
 
-		std::shared_ptr<ChoiceCommand> parseChoiceCommand(CharReader & reader)
+		ParseResult parseChoiceCommand(CharReader & reader)
 		{
 			auto choices = std::vector<std::string>();
 
@@ -219,80 +203,80 @@ namespace VNVita
 			return std::make_shared<ChoiceCommand>(std::move(choices));
 		}
 
-		std::shared_ptr<Command> parseLocalVariableCommand(CharReader & reader)
+		ParseResult parseLocalVariableCommand(CharReader & reader)
 		{
 			std::string left;
 			if(!tryReadString(reader, left))
-				throw ParseException("Unable to parse <left>"); // TODO: Handle error
+				return ParseResult(std::make_shared<SetLocalVariableCommand>(left, SetOperation::Assign, ""), "Unable to parse <left>");
 
 			std::string op;
 			if(!tryReadString(reader, op))
-				throw ParseException("Unable to parse <operation>"); // TODO: Handle error
+				return ParseResult(std::make_shared<SetLocalVariableCommand>(left, SetOperation::Assign, ""), "Unable to parse <operation>");
 
 			if(op == "~")
 				return std::make_shared<ClearLocalVariablesCommand>();
 
 			SetOperation operation;
-			if(!tryReadSetOperation(op, operation)) // TODO
-				throw ParseException("Unable to parse <operation>"); // TODO: Handle error
+			if(!tryReadSetOperation(op, operation))
+				return ParseResult(std::make_shared<SetLocalVariableCommand>(left, SetOperation::Assign, ""), "Unable to parse <operation>");
 
 			std::string right;
 			if(!tryReadString(reader, right))
-				throw ParseException("Unable to parse <right>"); // TODO: Handle error
+				return ParseResult(std::make_shared<SetLocalVariableCommand>(left, operation, ""), "Unable to parse <right>");
 
 			return std::make_shared<SetLocalVariableCommand>(left, operation, right);
 		}
 
-		std::shared_ptr<Command> parseGlobalVariableCommand(CharReader & reader)
+		ParseResult parseGlobalVariableCommand(CharReader & reader)
 		{
 			std::string left;
 			if(!tryReadString(reader, left))
-				throw ParseException("Unable to parse <left>"); // TODO: Handle error
+				return ParseResult(std::make_shared<SetGlobalVariableCommand>(left, SetOperation::Assign, ""), "Unable to parse <left>");
 
 			std::string op;
 			if(!tryReadString(reader, op))
-				throw ParseException("Unable to parse <operation>"); // TODO: Handle error
+				return ParseResult(std::make_shared<SetGlobalVariableCommand>(left, SetOperation::Assign, ""), "Unable to parse <operation>");
 
 			if(op == "~")
 				return std::make_shared<ClearGlobalVariablesCommand>();
 
 			SetOperation operation;
-			if(!tryReadSetOperation(op, operation)) // TODO
-				throw ParseException("Unable to parse <operation>"); // TODO: Handle error
+			if(!tryReadSetOperation(op, operation))
+				return ParseResult(std::make_shared<SetGlobalVariableCommand>(left, SetOperation::Assign, ""), "Unable to parse <operation>");
 
 			std::string right;
 			if(!tryReadString(reader, right))
-				throw ParseException("Unable to parse <right>"); // TODO: Handle error
+				return ParseResult(std::make_shared<SetGlobalVariableCommand>(left, operation, ""), "Unable to parse <right>");
 
 			return std::make_shared<SetGlobalVariableCommand>(left, operation, right);
 		}
 
-		std::shared_ptr<IfCommand> parseIfCommand(CharReader & reader)
+		ParseResult parseIfCommand(CharReader & reader)
 		{
 			std::string left;
 			if(!tryReadString(reader, left))
-				throw ParseException("Unable to parse <left>"); // TODO: Handle error
+				return ParseResult(std::make_shared<IfCommand>(left, IfOperation::Equals, ""), "Unable to parse <left>");
 
 			std::string op;
 			if(!tryReadString(reader, op))
-				throw ParseException("Unable to parse <operation>"); // TODO: Handle error
+				return ParseResult(std::make_shared<IfCommand>(left, IfOperation::Equals, ""), "Unable to parse <operation>");
 
 			IfOperation operation;
-			if(!tryReadIfOperation(op, operation)) // TODO
-				throw ParseException("Unable to parse <operation>"); // TODO: Handle error
+			if(!tryReadIfOperation(op, operation))
+				return ParseResult(std::make_shared<IfCommand>(left, IfOperation::Equals, ""), "Unable to parse <operation>");
 
 			std::string right;
 			if(!tryReadString(reader, right))
-				throw ParseException("Unable to parse <right>"); // TODO: Handle error
+				return ParseResult(std::make_shared<IfCommand>(left, IfOperation::Equals, right), "Unable to parse <right>");
 
 			return std::make_shared<IfCommand>(left, operation, right);
 		}
 
-		std::shared_ptr<JumpCommand> parseJumpCommand(CharReader & reader)
+		ParseResult parseJumpCommand(CharReader & reader)
 		{
 			std::string path;
 			if(!tryReadString(reader, path))
-				throw ParseException("Unable to parse <path>");
+				return ParseResult(std::make_shared<JumpCommand>(path), "Unable to parse <path>");
 
 			std::string label;
 			if(!tryReadString(reader, label))
@@ -301,46 +285,46 @@ namespace VNVita
 			return std::make_shared<JumpCommand>(path, label);
 		}
 
-		std::shared_ptr<DelayCommand> parseDelayCommand(CharReader & reader)
+		ParseResult parseDelayCommand(CharReader & reader)
 		{
 			int time;
 			if(!tryReadInt(reader, time))
-				throw ParseException("Unable to parse <low>"); // TODO: Handle error
+				return ParseResult(std::make_shared<DelayCommand>(0), "Unable to parse <time>");
 
 			return std::make_shared<DelayCommand>(time);
 		}
 
-		std::shared_ptr<RandomCommand> parseRandomCommand(CharReader & reader)
+		ParseResult parseRandomCommand(CharReader & reader)
 		{
 			std::string variable;
 			if(!tryReadString(reader, variable))
-				throw ParseException("Unable to parse <variable>"); // TODO: Handle error
+				return ParseResult(std::make_shared<RandomCommand>(variable, 0, 0), "Unable to parse <variable>");
 
 			int low;
 			if(!tryReadInt(reader, low))
-				throw ParseException("Unable to parse <low>"); // TODO: Handle error
+				return ParseResult(std::make_shared<RandomCommand>(variable, low, 0), "Unable to parse <low>");
 
 			int high;
 			if(!tryReadInt(reader, high))
-				throw ParseException("Unable to parse <high>"); // TODO: Handle error
+				return ParseResult(std::make_shared<RandomCommand>(variable, low, high), "Unable to parse <high>");
 
 			return std::make_shared<RandomCommand>(variable, low, high);
 		}
 
-		std::shared_ptr<LabelCommand> parseLabelCommand(CharReader & reader)
+		ParseResult parseLabelCommand(CharReader & reader)
 		{
 			std::string label;
 			if(!tryReadString(reader, label))
-				throw ParseException("Unable to parse <label>");
+				return ParseResult(std::make_shared<LabelCommand>(label), "Unable to parse <label>");
 
 			return std::make_shared<LabelCommand>(label);
 		}
 
-		std::shared_ptr<GoToCommand> parseGoToCommand(CharReader & reader)
+		ParseResult parseGoToCommand(CharReader & reader)
 		{
 			std::string label;
 			if(!tryReadString(reader, label))
-				throw ParseException("Unable to parse <label>");
+				return ParseResult(std::make_shared<GoToCommand>(label), "Unable to parse <label>");
 
 			return std::make_shared<GoToCommand>(label);
 		}

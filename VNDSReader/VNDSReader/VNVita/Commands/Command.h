@@ -22,8 +22,6 @@ namespace VNVita
 
 	class Command
 	{
-	private:
-
 	public:
 		virtual ~Command() = default;
 
