@@ -335,6 +335,11 @@ namespace VNVita
 			return reader.tryReadDelimited(result, delimiters);
 		}
 
+		static bool tryReadLine(CharReader & reader, std::string & result)
+		{
+			return reader.tryReadRemaining(result);
+		}
+
 		static bool tryReadInt(CharReader & reader, int & result)
 		{
 			std::string text;
