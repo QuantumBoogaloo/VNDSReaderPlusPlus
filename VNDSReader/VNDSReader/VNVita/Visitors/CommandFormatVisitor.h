@@ -207,7 +207,7 @@ namespace VNVita
 		virtual void visitIfCommand(IfCommand & ifCommand) override
 		{
 			this->writeIndent();
-			this->outputStream << "if " << ifCommand.getLeft() << ' ' << toString(ifCommand.getOperation()) << ' ' << ifCommand.getLeft() << '\n';
+			this->outputStream << "if " << ifCommand.getLeft() << ' ' << toString(ifCommand.getOperation()) << ' ' << ifCommand.getRight() << '\n';
 			this->increaseIndent();
 		}
 
