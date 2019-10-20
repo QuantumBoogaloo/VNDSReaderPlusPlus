@@ -83,6 +83,58 @@ namespace VNVita
 			this->nextIndex = this->string.size();
 
 		}
+
+		string_type readDelimited(const_pointer charset) override
+		{
+			if(!this->hasNext())
+				return "";
+
+			const size_type first = this->string.find_first_not_of(charset, this->nextIndex);
+			if(first == string_type::npos)
+			{
+				this->nextIndex = this->string.size();
+				return "":
+			}
+
+			const size_type end = this->string.find_first_of(charset, first);
+			if(end == string_type::npos)
+			{
+				this->nextIndex = this->string.size();
+				return this->string.substr(first);
+			}
+			else
+			{
+				this->nextIndex = end;
+				return this->string.substr(first, (end - first));
+			}
+		}
+
+		bool tryReadDelimited(string_type & output, const_pointer charset) override
+		{
+			if(!this->hasNext())
+				return false;
+
+			const size_type first = this->string.find_first_not_of(charset, this->nextIndex);
+			if(first == string_type::npos)
+			{
+				this->nextIndex = this->string.size();
+				return false:
+			}
+
+			const size_type end = this->string.find_first_of(charset, first);
+			if(end == string_type::npos)
+			{
+				this->nextIndex = this->string.size();
+				output = this->string.substr(first);
+			}
+			else
+			{
+				this->nextIndex = end;
+				output = this->string.substr(first, (end - first));
+			}
+
+			return true;
+		}
 	};
 
 	using StringCharReader = BasicStringCharReader<char>;

@@ -129,7 +129,7 @@ namespace VNVita
 			return true;
 		}
 
-		string_type readDelimited(const_pointer charset)
+		virtual string_type readDelimited(const_pointer charset)
 		{
 			const size_type charsetLength = traits_type::length(charset);
 
@@ -159,7 +159,7 @@ namespace VNVita
 			return result;
 		}
 
-		bool tryReadDelimited(string_type & output, const_pointer charset)
+		virtual bool tryReadDelimited(string_type & output, const_pointer charset)
 		{
 			const size_type charsetLength = traits_type::length(charset);
 
