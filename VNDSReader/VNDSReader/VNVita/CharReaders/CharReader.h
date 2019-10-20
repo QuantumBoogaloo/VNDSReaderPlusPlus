@@ -73,14 +73,16 @@ namespace VNVita
 
 		string_type readUntil(value_type c)
 		{
-			if(this->hasNext())
+			while(true)
 			{
+				if(!this->hasNext())
+					return false;
+
 				const value_type next = this->peekNext();
 				if(traits_type::eq(next, c))
-				{
-					this->readNext();
-					return "";
-				}
+					break;
+
+				this->readNext();
 			}
 
 			string_type result;
