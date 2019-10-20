@@ -76,7 +76,7 @@ namespace VNVita
 			while(true)
 			{
 				if(!this->hasNext())
-					return false;
+					return "";
 
 				const value_type next = this->peekNext();
 				if(traits_type::eq(next, c))
