@@ -177,7 +177,7 @@ namespace VNVita
 		ParseResult parseTextCommand(CharReader & reader)
 		{
 			std::string text;
-			if(!tryReadString(reader, text))
+			if(!tryReadLine(reader, text))
 				return std::make_shared<TextCommand>("", TextOption::AwaitInput);
 
 			switch(text[0])
@@ -221,8 +221,8 @@ namespace VNVita
 				return ParseResult(std::make_shared<SetLocalVariableCommand>(left, SetOperation::Assign, ""), "Unable to parse <operation>");
 
 			std::string right;
-			if(!tryReadString(reader, right))
-				return ParseResult(std::make_shared<SetLocalVariableCommand>(left, operation, ""), "Unable to parse <right>");
+			if(!tryReadLine(reader, right))
+				return std::make_shared<SetLocalVariableCommand>(left, operation, right);
 
 			return std::make_shared<SetLocalVariableCommand>(left, operation, right);
 		}
@@ -245,8 +245,8 @@ namespace VNVita
 				return ParseResult(std::make_shared<SetGlobalVariableCommand>(left, SetOperation::Assign, ""), "Unable to parse <operation>");
 
 			std::string right;
-			if(!tryReadString(reader, right))
-				return ParseResult(std::make_shared<SetGlobalVariableCommand>(left, operation, ""), "Unable to parse <right>");
+			if(!tryReadLine(reader, right))
+				return std::make_shared<SetGlobalVariableCommand>(left, operation, right);
 
 			return std::make_shared<SetGlobalVariableCommand>(left, operation, right);
 		}
