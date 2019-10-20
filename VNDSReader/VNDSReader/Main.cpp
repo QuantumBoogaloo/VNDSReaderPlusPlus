@@ -48,7 +48,7 @@ int main(int argumentCount, const char * arguments[])
 	return EXIT_SUCCESS;
 }
 
-bool tryReplaceExtension(const std::string & input, std::string & result, const std::string & newExtension)
+bool tryReplaceFileExtension(const std::string & input, std::string & result, const std::string & newExtension)
 {
 	const auto position = input.rfind('.');
 
@@ -135,7 +135,7 @@ void ProcessFile(std::string path)
 
 	// Get output file path
 	std::string outputPath;
-	if(!tryReplaceExtension(path, outputPath, ".vnvita"))
+	if(!tryReplaceFileExtension(path, outputPath, ".vnvita"))
 		return;
 
 	// Open output file
