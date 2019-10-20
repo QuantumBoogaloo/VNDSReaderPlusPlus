@@ -60,6 +60,29 @@ namespace VNVita
 			++this->nextIndex;
 			return result;
 		}
+
+		string_type readRemaining() override
+		{
+			if(this->hasNext())
+				return "";
+
+			const auto index = this->nextIndex;
+
+			this->nextIndex = this->string.size();
+
+			return this->string.substr(index);
+		}
+
+		bool tryReadRemaining(string_type & result) override
+		{
+			if(!this->hasNext())
+				return false;
+
+			result = this->string.substr(this->nextIndex);
+
+			this->nextIndex = this->string.size();
+
+		}
 	};
 
 	using StringCharReader = BasicStringCharReader<char>;

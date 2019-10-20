@@ -53,6 +53,24 @@ namespace VNVita
 
 		virtual value_type readNext() = 0;
 
+		virtual string_type readRemaining()
+		{
+			string_type result;
+
+			while(this->hasNext())
+				result += this->readNext();
+
+			return result;
+		}
+
+		virtual bool tryReadRemaining(string_type & result)
+		{
+			if(!this->hasNext())
+				return false;
+
+			result = this->readRemaining();
+		}
+
 		string_type readUntil(value_type c)
 		{
 			if(this->hasNext())
