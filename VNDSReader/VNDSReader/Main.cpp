@@ -50,7 +50,7 @@ int main(int argumentCount, const char * arguments[])
 
 bool tryReplaceExtension(const std::string & input, std::string & result, const std::string & newExtension)
 {
-	const auto position = input.find('.');
+	const auto position = input.rfind('.');
 
 	if(position == std::string::npos)
 		return false;
