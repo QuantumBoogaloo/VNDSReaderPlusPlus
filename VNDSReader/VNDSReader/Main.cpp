@@ -23,7 +23,7 @@
 //  limitations under the License.
 //
 
-void ProcessFile(std::string path);
+void processFile(std::string path);
 
 int main(int argumentCount, const char * arguments[])
 {
@@ -37,7 +37,7 @@ int main(int argumentCount, const char * arguments[])
 	{
 		try
 		{
-			ProcessFile(arguments[index]);
+			processFile(arguments[index]);
 		}
 		catch(VNVita::ParseException & exception)
 		{
@@ -117,7 +117,7 @@ std::vector<std::shared_ptr<VNVita::Command>> filterErroneousCommands(const std:
 	return commands;
 }
 
-void ProcessFile(std::string path)
+void processFile(std::string path)
 {
 	using namespace VNVita;
 
