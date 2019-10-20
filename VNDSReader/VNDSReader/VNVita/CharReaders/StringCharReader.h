@@ -93,7 +93,7 @@ namespace VNVita
 			if(first == string_type::npos)
 			{
 				this->nextIndex = this->string.size();
-				return "":
+				return "";
 			}
 
 			const size_type end = this->string.find_first_of(charset, first);
@@ -118,7 +118,7 @@ namespace VNVita
 			if(first == string_type::npos)
 			{
 				this->nextIndex = this->string.size();
-				return false:
+				return false;
 			}
 
 			const size_type end = this->string.find_first_of(charset, first);
